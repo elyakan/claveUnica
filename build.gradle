@@ -1,0 +1,39 @@
+plugins {
+	id 'java'
+	id 'war'
+	id 'org.springframework.boot' version '2.7.8'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "org.sonarqube" version "2.7"
+}
+
+group = 'cl.fonasa'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation('org.springframework.boot:spring-boot-starter')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation "org.springframework.boot:spring-boot-starter-tomcat"
+	implementation 'org.projectlombok:lombok:1.18.22'
+	implementation 'com.liferay.poshi.runner.resources:portal-HEAD:20181127145156-59148a8'
+
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/io.vertx/vertx-core
+	implementation group: 'io.vertx', name: 'vertx-core', version: '4.3.7'
+	// https://mvnrepository.com/artifact/javax.json/javax.json-api
+	implementation group: 'javax.json', name: 'javax.json-api', version: '1.1.4'
+	// https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api
+	implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
+
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
