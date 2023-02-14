@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: Clave Unica - Gobierno Digital
+  description: |-
+    Servicio api-rest java, springboots 2.7, gradle
+    
+    Referencias links:
+    - [Documento tecnico gobierno digital](https://docs.google.com/document/d/16c0D2jVhuYOYGI9z4kC2aoNH8oWNA9v1cc3tXQ76TO0/edit)
+  contact:
+    email: carlos.acuna_ext@fonasa.cl
+  version: 1.0.0
+servers:
+  - url: http://fosqa01adminin.fonasa.local:20000/console/login/LoginForm.jsp
+tags:
+  - name: claveunica
+    description: metodos para integracion
+    externalDocs:
+      description: link oficial clave unica
+      url: https://claveunica.gob.cl/
+  
+paths:
+  /claveunica/resources/authorize:
+    get:
+      tags:
+        - claveunica
+      summary: Entrega URL
+      description: con la URL se debe generar el logeo a CUE
+      operationId: authorize
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Url' 
+        '400':
+          description: Invalid tag value
+  /claveunica/resources/token/:
+    post:
+      tags:
+        - claveunica
+      summary: Genera token
+      description: ''
+      operationId: token
+      parameters:
+        - name: client_id
+          in: header
+          description: id cliente(FONASA)
+          required: true
+          schema:
+            type: string
+        - name: client_secret
+          in: header
+          description: clave secreta cliente(FONASA)
+          required: true
+          schema:
+            type: string    
+        - name: redirect_uri
+          in: header
+          description: url callback
+          required: true
+          schema:
+            type: string        
+        - name: grant_type
+          in: header
+          description: valor authorization_code
+          required: true
+          schema:
+            type: string        
+        - name: code
+          in: header
+          description: valor retornado al autenticar
+          required: true
+          schema:
+            type: string            
+        - name: state
+          in: header
+          description: valor generado por servicio
+          required: true
+          schema:
+            type: string  
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token' 
+  /claveunica/resources/info/:
+    post:
+      tags:
+        - claveunica
+      summary: Informacion usuario logeado
+      description: Informacion usuario logeado
+      operationId: info
+      parameters:
+        - name: token
+          in: header
+          description: token generado por el servicio
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InfoPersona' 
+components:
+  schemas:
+    Token:
+      type: string
+    Url:
+      type: string
+    InfoPersona:
+      type: object
+      properties:
+        sub:
+          type: string
+        RolUnico:
+          type: string
+          properties:
+            numero:
+              type: integer  
+            DV:
+              type: string
+            tipo:
+              type: string  
+        name:
+          type: string
+          properties:
+            nombres:
+              type: string  
+            apellidos:
+              type: string
+  
